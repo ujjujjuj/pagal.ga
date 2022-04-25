@@ -17,7 +17,7 @@ app.use(express.static("uploads", { extensions: ["png", "jpg", "jpeg", "mp4", "g
 app.use(express.static("public", { extensions: ["html", "png"] }));
 app.use(
     fileUpload({
-        limits: { fileSize: 16 * 1024 * 1024 },
+        limits: { fileSize: 100 * 1024 * 1024 },
     })
 );
 morgan.token("remote-addr", (req, res) => {
