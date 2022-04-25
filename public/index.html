@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>pagal</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                background-color: black;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-width: 100vw;
+                min-height: 100vh;
+                line-height: 0.4rem;
+                font-size: 0.6rem;
+            }
+            br::selection {
+                color: transparent;
+                background: transparent;
+            }
+        </style>
+    </head>
+    <body onclick="selectText('jinx')">
+        <script>
+            const N_COLORS = 255;
+            const IMG_SRC = "/jinx.jpg";
+            const MAX_WIDTH = 80;
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            const selectText = (id) => {
+                return;
+                const sel = window.getSelection();
+                window.setTimeout(function () {
+                    sel.removeAllRanges();
+                    const range = document.createRange();
+                    range.selectNodeContents(document.getElementById(id));
+                    sel.addRange(range);
+                }, 1);
+            };
+
+            const loadImage = () => {
+                const img = document.createElement("img");
+                img.onload = (e) => {
+                    let drawWidth = Math.min(MAX_WIDTH, img.naturalWidth);
+                    let drawHeight = Math.floor((drawWidth * img.naturalHeight) / img.naturalWidth);
+                    canvas.width = drawWidth;
+                    canvas.height = drawHeight;
+
+                    ctx.drawImage(img, 0, 0, drawWidth, drawHeight);
+                    generateText();
+                };
+                img.src = IMG_SRC;
+            };
+
+            const generateText = async () => {
+                let styleText = `<style>`;
+                let textElement = `<pre id="jinx">`;
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < imgData.data.length; i += 4) {
+                    let color = `rgb(${imgData.data[i]},${imgData.data[i + 1]},${
+                        imgData.data[i + 2]
+                    })`;
+                    let invertedColor = `rgb(${255 - imgData.data[i]},${
+                        255 - imgData.data[i + 1]
+                    },${255 - imgData.data[i + 2]})`;
+                    styleText += `
+                        #px-${i}::selection{
+                            color:${invertedColor};
+                            background:${invertedColor}
+                        }
+                        #px-${i}::-moz-selection{
+                            color:${color};
+                            background:${color}
+                        }
+                    `;
+                    textElement += `<span id="px-${i}">&nbsp;</span>`;
+                    if ((i / 4 + 1) % canvas.width == 0) {
+                        console.log((i / 4 + 1) / canvas.width, canvas.height);
+                        textElement += "<br />";
+                    }
+                }
+                textElement += "</pre>";
+                document.head.insertAdjacentHTML("beforeend", styleText);
+                document.body.insertAdjacentHTML("afterbegin", textElement);
+            };
+
+            loadImage();
+        </script>
+    </body>
+</html>

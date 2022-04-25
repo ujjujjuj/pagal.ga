@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Upload</title>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 10vh;
+            }
+            form {
+                width: 100%;
+                max-width: 600px;
+                display: flex;
+                flex-direction: column;
+                gap: 0.6rem;
+            }
+            form > input {
+                height: 1.6rem;
+            }
+            form > input[type="submit"] {
+                height: 2rem;
+            }
+        </style>
+    </head>
+    <body>
+        <form method="post" enctype="multipart/form-data">
+            <input type="text" name="filename" placeholder="File name with extension" />
+            <input type="text" name="username" placeholder="Username" />
+            <input type="password" name="password" placeholder="Password" />
+            <input type="file" name="file" />
+            <input type="submit" value="Upload" />
+        </form>
+    </body>
+</html>
