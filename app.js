@@ -47,6 +47,15 @@ app.post("/upload", (req, res) => {
     return res.redirect(`/${req.body.filename}`);
 });
 
+app.get("/memes", (req, res) => {
+    return res.send(
+        fs
+            .readdirSync("uploads")
+            .map((file) => `<a href="/${file}">${file}</a>`)
+            .join("<br />")
+    );
+});
+
 app.get("*", (req, res) => {
     return res.redirect("/404");
 });
